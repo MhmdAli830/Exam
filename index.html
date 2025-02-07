@@ -21,6 +21,14 @@
             font-weight: bold;
             display: none;
         }
+        .blinking {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0; }
+            100% { opacity: 1; }
+        }
         iframe {
             width: 100%;
             height: 600px;
@@ -28,7 +36,7 @@
         }
     </style>
     <script>
-        let totalTime = 320; // Time in seconds (10 minutes)
+        let totalTime = 600; // Time in seconds (10 minutes)
         let startTime;
 
         function startTimer() {
@@ -44,11 +52,12 @@
                 let timeElapsed = currentTime - startTime;
                 let timeLeft = totalTime - timeElapsed;
                 let warningMessage = document.getElementById("warning");
+                let timerElement = document.getElementById("timer");
 
                 if (timeLeft > 0) {
                     let minutes = Math.floor(timeLeft / 60);
                     let seconds = timeLeft % 60;
-                    document.getElementById("timer").textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                    timerElement.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
                     // Show warning messages and play sounds
                     if (timeLeft === 300) { // 5 minutes left
@@ -60,11 +69,12 @@
                         warningMessage.textContent = "⚠️ Only 1 minute remaining!";
                         warningMessage.style.display = "block";
                         playWarningSound();
+                        timerElement.classList.add("blinking"); // Add blinking effect
                     }
 
                     setTimeout(updateTimer, 1000);
                 } else {
-                    document.getElementById("timer").textContent = "⏳ Submitting form...";
+                    timerElement.textContent = "⏳ Submitting form...";
                     warningMessage.style.display = "none"; 
                     showSubmissionAlert();
                 }
