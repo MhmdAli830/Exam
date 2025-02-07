@@ -79,12 +79,10 @@
                     progressBar.style.width = progressPercentage + "%";
 
                     // Show warnings and play different sounds
-                    if (timeLeft === Math.floor(totalTime / 2)) {  
+                    if (timeLeft <= Math.floor(totalTime / 2) && timeLeft > Math.floor(totalTime / 2) - 2) { 
                         warningMessage.textContent = "⚠️ You are halfway through the time!";
                         warningMessage.style.display = "block";
                         playWarningSound("https://www.fesliyanstudios.com/play-mp3/4916");
-                    }
-        
                     } 
                     else if (timeLeft === 300) { // 5 minutes left
                         warningMessage.textContent = "⚠️ 5 minutes left! Hurry up!";
