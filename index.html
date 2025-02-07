@@ -29,6 +29,20 @@
             50% { opacity: 0; }
             100% { opacity: 1; }
         }
+        /* Progress bar styles */
+        #progress-container {
+            width: 80%;
+            background-color: #ddd;
+            margin: 10px auto;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        #progress-bar {
+            height: 20px;
+            width: 100%;
+            background-color: green;
+            transition: width 1s linear;
+        }
         iframe {
             width: 100%;
             height: 600px;
@@ -36,7 +50,7 @@
         }
     </style>
     <script>
-        let totalTime = 310; // Time in seconds (10 minutes)
+        let totalTime = 600; // Time in seconds (10 minutes)
         let startTime;
 
         function startTimer() {
@@ -53,14 +67,24 @@
                 let timeLeft = totalTime - timeElapsed;
                 let warningMessage = document.getElementById("warning");
                 let timerElement = document.getElementById("timer");
+                let progressBar = document.getElementById("progress-bar");
 
                 if (timeLeft > 0) {
                     let minutes = Math.floor(timeLeft / 60);
                     let seconds = timeLeft % 60;
                     timerElement.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
+                    // Update progress bar
+                    let progressPercentage = (timeLeft / totalTime) * 100;
+                    progressBar.style.width = progressPercentage + "%";
+
                     // Show warning messages and play sounds
-                    if (timeLeft === 300) { // 5 minutes left
+                    if (timeLeft === totalTime / 2) { // Half-time warning
+                        warningMessage.textContent = "⚠️ You are halfway through the time!";
+                        warningMessage.style.display = "block";
+                        playWarningSound();
+                    }
+                    else if (timeLeft === 300) { // 5 minutes left
                         warningMessage.textContent = "⚠️ 5 minutes left! Hurry up!";
                         warningMessage.style.display = "block";
                         playWarningSound();
@@ -112,8 +136,13 @@
 <body>
     <h1>Google Form with Timer</h1>
     <div id="timer">Time Left: 10:00</div>
-    <div id="warning"></div> 
-    
+    <div id="warning"></div>
+
+    <!-- Progress bar -->
+    <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
     <iframe id="formFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSdfck49zdsLIzUIx2CzShjTQ6nps0VMKKPQHE3k8sVgnles5g/viewform?usp=header" allowfullscreen></iframe>
 
 </body>
