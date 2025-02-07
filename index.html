@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Form with Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,7 +21,7 @@
             display: none;
         }
         .blinking {
-            animation: blink 1s infinite;
+            animation: blink 2s infinite;
         }
         @keyframes blink {
             0% { opacity: 1; }
@@ -108,7 +107,7 @@
         }
 
         function playWarningSound() {
-            let sound = new Audio("https://www.fesliyanstudios.com/play-mp3/4388"); // Online beep sound
+            let sound = new Audio("https://www.fesliyanstudios.com/play-mp3/4916"); // Online beep sound
             sound.play();
         }
 
@@ -118,13 +117,20 @@
         }
 
         function submitGoogleForm() {
-            let formFrame = document.getElementById("formFrame").contentWindow.document;
-            let submitButton = formFrame.querySelector('div[role="button"]'); // Finds the submit button
+            let formFrame = document.getElementById("formFrame").contentWindow;
+            let submitButton;
 
-            if (submitButton) {
-                submitButton.click(); // Click the submit button automatically
-            } else {
-                document.getElementById("timer").textContent = "❌ Could not auto-submit. Please submit manually!";
+            try {
+                let buttons = formFrame.document.querySelectorAll("div[role='button']");
+                submitButton = Array.from(buttons).find(button => button.innerText.includes("Submit"));
+
+                if (submitButton) {
+                    submitButton.click(); // Click the submit button
+                } else {
+                    alert("❌ Could not auto-submit. Please submit manually!");
+                }
+            } catch (error) {
+                alert("⚠️ Auto-submission failed due to security restrictions. Please submit manually.");
             }
 
             localStorage.removeItem("startTime"); // Clear timer storage
