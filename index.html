@@ -28,7 +28,7 @@
         }
     </style>
     <script>
-        let totalTime = 360; // Time in seconds (10 minutes)
+        let totalTime = 600; // Time in seconds (10 minutes)
         let startTime;
 
         function startTimer() {
@@ -50,26 +50,37 @@
                     let seconds = timeLeft % 60;
                     document.getElementById("timer").textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 
-                    // Show warning messages
-                    if (timeLeft === 300) { 
+                    // Show warning messages and play sounds
+                    if (timeLeft === 300) { // 5 minutes left
                         warningMessage.textContent = "⚠️ 5 minutes left! Hurry up!";
                         warningMessage.style.display = "block";
-                    } else if (timeLeft === 60) { 
+                        playWarningSound();
+                    } 
+                    else if (timeLeft === 60) { // 1 minute left
                         warningMessage.textContent = "⚠️ Only 1 minute remaining!";
                         warningMessage.style.display = "block";
+                        playWarningSound();
                     }
 
                     setTimeout(updateTimer, 1000);
                 } else {
                     document.getElementById("timer").textContent = "⏳ Submitting form...";
                     warningMessage.style.display = "none"; 
-
-                    // Auto-submit the form
-                    submitGoogleForm();
+                    showSubmissionAlert();
                 }
             }
 
             updateTimer();
+        }
+
+        function playWarningSound() {
+            let sound = new Audio("https://www.fesliyanstudios.com/play-mp3/4388"); // Online beep sound
+            sound.play();
+        }
+
+        function showSubmissionAlert() {
+            alert("⏳ Time is up! Your form will now be submitted automatically.");
+            submitGoogleForm();
         }
 
         function submitGoogleForm() {
