@@ -15,6 +15,12 @@
             color: red;
             margin-bottom: 10px;
         }
+        #warning {
+            font-size: 20px;
+            color: orange;
+            font-weight: bold;
+            display: none;
+        }
         iframe {
             width: 100%;
             height: 600px;
@@ -22,15 +28,14 @@
         }
     </style>
     <script>
-        let totalTime = 60; // Set time in seconds (e.g., 600 = 10 minutes)
+        let totalTime = 360; // Time in seconds (10 minutes)
         let startTime;
 
         function startTimer() {
-            // Check if a previous start time exists
             if (localStorage.getItem("startTime")) {
                 startTime = parseInt(localStorage.getItem("startTime"));
             } else {
-                startTime = Math.floor(Date.now() / 1000); // Store start time as UNIX timestamp
+                startTime = Math.floor(Date.now() / 1000);
                 localStorage.setItem("startTime", startTime);
             }
 
@@ -38,20 +43,46 @@
                 let currentTime = Math.floor(Date.now() / 1000);
                 let timeElapsed = currentTime - startTime;
                 let timeLeft = totalTime - timeElapsed;
+                let warningMessage = document.getElementById("warning");
 
                 if (timeLeft > 0) {
                     let minutes = Math.floor(timeLeft / 60);
                     let seconds = timeLeft % 60;
                     document.getElementById("timer").textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+
+                    // Show warning messages
+                    if (timeLeft === 300) { 
+                        warningMessage.textContent = "⚠️ 5 minutes left! Hurry up!";
+                        warningMessage.style.display = "block";
+                    } else if (timeLeft === 60) { 
+                        warningMessage.textContent = "⚠️ Only 1 minute remaining!";
+                        warningMessage.style.display = "block";
+                    }
+
                     setTimeout(updateTimer, 1000);
                 } else {
-                    document.getElementById("timer").textContent = "Time is up!";
-                    document.getElementById("formFrame").style.display = "none"; // Hide the form
-                    localStorage.removeItem("startTime"); // Clear stored time
+                    document.getElementById("timer").textContent = "⏳ Submitting form...";
+                    warningMessage.style.display = "none"; 
+
+                    // Auto-submit the form
+                    submitGoogleForm();
                 }
             }
 
             updateTimer();
+        }
+
+        function submitGoogleForm() {
+            let formFrame = document.getElementById("formFrame").contentWindow.document;
+            let submitButton = formFrame.querySelector('div[role="button"]'); // Finds the submit button
+
+            if (submitButton) {
+                submitButton.click(); // Click the submit button automatically
+            } else {
+                document.getElementById("timer").textContent = "❌ Could not auto-submit. Please submit manually!";
+            }
+
+            localStorage.removeItem("startTime"); // Clear timer storage
         }
 
         window.onload = startTimer;
@@ -60,8 +91,9 @@
 <body>
     <h1>Google Form with Timer</h1>
     <div id="timer">Time Left: 10:00</div>
+    <div id="warning"></div> 
     
     <iframe id="formFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSdfck49zdsLIzUIx2CzShjTQ6nps0VMKKPQHE3k8sVgnles5g/viewform?usp=header" allowfullscreen></iframe>
-    
+
 </body>
 </html>
