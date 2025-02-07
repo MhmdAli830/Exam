@@ -79,26 +79,28 @@
                     progressBar.style.width = progressPercentage + "%";
 
                     // Show warnings and play different sounds
-                    if (timeLeft <= Math.floor(totalTime / 2) && timeLeft > Math.floor(totalTime / 2) - 2) { 
+                    if (timeLeft === Math.floor(totalTime / 2)) {  
                         warningMessage.textContent = "⚠️ You are halfway through the time!";
                         warningMessage.style.display = "block";
-                        playWarningSound("https://www.fesliyanstudios.com/play-mp3/4388");
+                        playWarningSound("https://www.fesliyanstudios.com/play-mp3/4916");
+                    }
+        
                     } 
                     else if (timeLeft === 300) { // 5 minutes left
                         warningMessage.textContent = "⚠️ 5 minutes left! Hurry up!";
                         warningMessage.style.display = "block";
-                        playWarningSound("https://www.fesliyanstudios.com/play-mp3/4393");
+                        playWarningSound("https://www.fesliyanstudios.com/play-mp3/4916");
                     } 
                     else if (timeLeft === 60) { // 1 minute left
                         warningMessage.textContent = "⚠️ Only 1 minute remaining!";
                         warningMessage.style.display = "block";
-                        playWarningSound("https://www.fesliyanstudios.com/play-mp3/4394");
+                        playWarningSound("https://www.fesliyanstudios.com/play-mp3/4916");
                         timerElement.classList.add("blinking"); // Add blinking effect
                     }
 
                     // 🔔 Countdown beep for last 10 seconds
                     if (timeLeft <= 10 && timeLeft > 0) {
-                        playWarningSound("https://www.fesliyanstudios.com/play-mp3/2763"); // Short beep sound
+                        playWarningSound("https://www.fesliyanstudios.com/play-mp3/4916"); // Short beep sound
                     }
 
                     setTimeout(updateTimer, 1000);
