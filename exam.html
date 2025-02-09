@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Form with Timer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin: 20px;
+            margin: 0px;
         }
         #timer {
             font-size: 24px;
@@ -103,9 +102,9 @@
 
                     setTimeout(updateTimer, 1000);
                 } else {
-                    timerElement.textContent = "⏳ Submitting form...";
+                    timerElement.textContent = "⏳ Time is up!";
                     warningMessage.style.display = "none"; 
-                    showSubmissionAlert();
+                    alert("⏳ Time is up! Please submit your form manually.");
                 }
             }
 
@@ -115,31 +114,6 @@
         function playWarningSound(soundUrl) {
             let sound = new Audio(soundUrl); // Play different sounds for each warning
             sound.play();
-        }
-
-        function showSubmissionAlert() {
-            alert("⏳ Time is up! Your form will now be submitted automatically.");
-            submitGoogleForm();
-        }
-
-        function submitGoogleForm() {
-            let formFrame = document.getElementById("formFrame").contentWindow;
-            let submitButton;
-
-            try {
-                let buttons = formFrame.document.querySelectorAll("div[role='button']");
-                submitButton = Array.from(buttons).find(button => button.innerText.includes("Submit"));
-
-                if (submitButton) {
-                    submitButton.click(); // Click the submit button
-                } else {
-                    alert("❌ Could not auto-submit. Please submit manually!");
-                }
-            } catch (error) {
-                alert("⚠️ Auto-submission failed due to security restrictions. Please submit manually.");
-            }
-
-            localStorage.removeItem("startTime"); // Clear timer storage
         }
 
         window.onload = startTimer;
