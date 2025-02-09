@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #timer {
+            font-size: 24px;
+            color: red;
+            margin-bottom: 10px;
+        }
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+    </style>
+    <script>
+        let totalTime = 310;
+        let startTime;
+
+        function startTimer() {
+            if (!localStorage.getItem("examStarted")) {
+                window.location.href = "index.html"; // Redirect if they didn't enter the password
+                return;
+            }
+
+            if (localStorage.getItem("startTime")) {
+                startTime = parseInt(localStorage.getItem("startTime"));
+            } else {
+                startTime = Math.floor(Date.now() / 1000);
+                localStorage.setItem("startTime", startTime);
+            }
+
+            function updateTimer() {
+                let currentTime = Math.floor(Date.now() / 1000);
+                let timeElapsed = currentTime - startTime;
+                let timeLeft = totalTime - timeElapsed;
+                let timerElement = document.getElementById("timer");
+
+                if (timeLeft > 0) {
+                    let minutes = Math.floor(timeLeft / 60);
+                    let seconds = timeLeft % 60;
+                    timerElement.textContent = `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                    setTimeout(updateTimer, 1000);
+                } else {
+                    timerElement.textContent = "⏳ Submitting form...";
+                    window.location.href = "submit.html"; // Redirect to manual submission page
+                }
+            }
+
+            updateTimer();
+        }
+
+        window.onload = startTimer;
+    </script>
+</head>
+<body>
+    <div id="timer">Time Left: 10:00</div>
+    <iframe id="formFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSdfck49zdsLIzUIx2CzShjTQ6nps0VMKKPQHE3k8sVgnles5g/viewform?usp=header" allowfullscreen></iframe>
+</body>
+</html>
