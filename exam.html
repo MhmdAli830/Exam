@@ -117,7 +117,16 @@
             sound.play();
         }
 
-        window.onload = startTimer;
+        window.onload = function() {
+    if (localStorage.getItem("timeExpired")) {
+        document.getElementById("timer").textContent = "⏳ Time is up!";
+        document.getElementById("warning").style.display = "none";
+    } else {
+        startTimer();
+    }
+};
+
+   
     </script>
 </head>
 <body>
