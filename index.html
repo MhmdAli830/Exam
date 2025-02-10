@@ -65,7 +65,17 @@
         <p>Please enter the exam password to continue:</p>
         <input type="password" id="password" placeholder="Enter Password">
         <br>
-        <button onclick="checkPassword()">Start Exam</button>
+        
+<p><strong>Select Exam Duration:</strong></p>
+<select id="examDuration">
+    <option value="5">5 minutes</option>
+    <option value="10">10 minutes</option>
+    <option value="15">15 minutes</option>
+    <option value="20">20 minutes</option>
+    <option value="30">30 minutes</option>
+</select>
+<br>
+<button onclick="startExam()">Start Exam</button>        
         <p class="footer">BEST WISHES, USTADH MOHAMMED</p>
     </div>
 </body>
