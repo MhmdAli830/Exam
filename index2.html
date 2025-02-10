@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Setup</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+        input, select, button { padding: 10px; font-size: 16px; margin: 10px; }
+        #setupSection { display: none; } /* Hide time setup by default */
+    </style>
+</head>
+<body>
+    <h2>Exam Setup</h2>
+    <p>Only the examiner can set the exam time.</p>
+    
+    <!-- Password Entry -->
+    <input type="password" id="password" placeholder="Enter Examiner Password">
+    <button onclick="checkPassword()">Enter</button>
+
+    <!-- Time Selection (Hidden Initially) -->
+    <div id="setupSection">
+        <p>Select the time limit for the exam:</p>
+        <select id="timeSelect">
+            <option value="600">10 minutes</option>
+            <option value="1200">20 minutes</option>
+            <option value="1800">30 minutes</option>
+            <option value="2700">45 minutes</option>
+            <option value="3600">1 hour</option>
+        </select>
+        <br>
+        <button onclick="startExam()">Start Exam</button>
+    </div>
+
+    <script>
+        const examinerPassword = "1234"; // Change this to your secret password
+
+        function checkPassword() {
+            let enteredPassword = document.getElementById("password").value;
+            if (enteredPassword === examinerPassword) {
+                document.getElementById("setupSection").style.display = "block"; // Show time setup
+            } else {
+                alert("Incorrect password! You are not authorized to set the exam time.");
+            }
+        }
+
+        function startExam() {
+            let selectedTime = document.getElementById("timeSelect").value;
+            localStorage.setItem("examTime", selectedTime); // Save exam time
+            localStorage.removeItem("startTime"); // Reset previous timer
+            localStorage.removeItem("timeExpired"); // Reset time tracking
+            window.location.href = "exam.html"; // Redirect to exam
+        }
+    </script>
+</body>
+</html>
