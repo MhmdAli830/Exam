@@ -49,17 +49,19 @@
         }
     </style>
     <script>
-        let totalTime = localStorage.getItem("examTime") ? parseInt(localStorage.getItem("examTime")) : 600; 
-    // Time in seconds (e.g., 5 min = 300 sec)
+        let totalTime; // Declare total time    // Time in seconds (e.g., 5 min = 300 sec)
         let startTime;
 
-        function startTimer() {
-            if (localStorage.getItem("startTime")) {
-                startTime = parseInt(localStorage.getItem("startTime"));
-            } else {
-                startTime = Math.floor(Date.now() / 1000);
-                localStorage.setItem("startTime", startTime);
-            }
+function startTimer() {
+    totalTime = localStorage.getItem("examTime") ? parseInt(localStorage.getItem("examTime")) : 300; // Default 5 mins
+
+    if (localStorage.getItem("startTime")) {
+        startTime = parseInt(localStorage.getItem("startTime"));
+    } else {
+        startTime = Math.floor(Date.now() / 1000);
+        localStorage.setItem("startTime", startTime);
+    }
+        
 
             function updateTimer() {
                 let currentTime = Math.floor(Date.now() / 1000);
@@ -122,12 +124,13 @@ if (!localStorage.getItem("timeExpired")) {
         }
 
 window.onload = function() {
-    if (localStorage.getItem("timeExpired")) {
-        document.getElementById("timer").textContent = "⏳ Time is up!";
-        document.getElementById("warning").style.display = "none";
-    } else {
-        startTimer();
+    if (!localStorage.getItem("examStarted")) {
+        alert("You must enter the exam through the correct page!");
+        window.location.href = "index.html";
+        return;
     }
+
+    startTimer();
 };
 
 
