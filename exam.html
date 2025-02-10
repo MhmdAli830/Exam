@@ -9,7 +9,7 @@
             text-align: center;
             margin: 0px;
         }
-        #timer {
+        #timer {0
             font-size: 24px;
             color: red;
             margin-bottom: 10px;
@@ -49,19 +49,18 @@
         }
     </style>
     <script>
-        let totalTime; // Declare total time    // Time in seconds (e.g., 5 min = 300 sec)
+       let totalTime = 60*60;    // Time in seconds (e.g., 5 min = 300 sec)
+   // Time in seconds (e.g., 5 min = 300 sec)
         let startTime;
-
+ 
 function startTimer() {
-    totalTime = localStorage.getItem("examTime") ? parseInt(localStorage.getItem("examTime")) : 300; // Default 5 mins
-
     if (localStorage.getItem("startTime")) {
         startTime = parseInt(localStorage.getItem("startTime"));
     } else {
         startTime = Math.floor(Date.now() / 1000);
         localStorage.setItem("startTime", startTime);
     }
-        
+
 
             function updateTimer() {
                 let currentTime = Math.floor(Date.now() / 1000);
