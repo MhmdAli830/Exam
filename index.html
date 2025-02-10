@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,21 +47,15 @@
         }
     </style>
     <script>
-
-        function startExam() {
-    let password = document.getElementById("password").value;
-    let selectedTime = document.getElementById("examDuration").value; // Get selected time
-
-    if (password === "123") { // Change this password as needed
-        localStorage.setItem("examStarted", "true");
-        localStorage.setItem("examTime", selectedTime * 60); // Convert minutes to seconds
-        window.location.href = "exam.html";
-    } else {
-        alert("Incorrect password! Please try again.");
-    }
-}
-
-        
+        function checkPassword() {
+            let password = document.getElementById("password").value;
+            if (password === "123") { // Change this password as needed
+                localStorage.setItem("examStarted", "true");
+                window.location.href = "exam.html";
+            } else {
+                alert("Incorrect password! Please try again.");
+            }
+        }
     </script>
 </head>
 <body>
@@ -71,17 +66,7 @@
         <p>Please enter the exam password to continue:</p>
         <input type="password" id="password" placeholder="Enter Password">
         <br>
-        
-<p><strong>Select Exam Duration:</strong></p>
-<select id="examDuration">
-    <option value="5">5 minutes</option>
-    <option value="10">10 minutes</option>
-    <option value="15">15 minutes</option>
-    <option value="20">20 minutes</option>
-    <option value="30">30 minutes</option>
-</select>
-<br>
-<button onclick="startExam()">Start Exam</button>        
+        <button onclick="checkPassword()">Start Exam</button>
         <p class="footer">BEST WISHES, USTADH MOHAMMED</p>
     </div>
 </body>
