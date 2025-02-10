@@ -46,15 +46,21 @@
         }
     </style>
     <script>
-        function checkPassword() {
-            let password = document.getElementById("password").value;
-            if (password === "123") { // Change this password as needed
-                localStorage.setItem("examStarted", "true");
-                window.location.href = "exam.html";
-            } else {
-                alert("Incorrect password! Please try again.");
-            }
-        }
+
+        function startExam() {
+    let password = document.getElementById("password").value;
+    let selectedTime = document.getElementById("examDuration").value; // Get selected time
+
+    if (password === "123") { // Change this password as needed
+        localStorage.setItem("examStarted", "true");
+        localStorage.setItem("examTime", selectedTime * 60); // Convert minutes to seconds
+        window.location.href = "exam.html";
+    } else {
+        alert("Incorrect password! Please try again.");
+    }
+}
+
+        
     </script>
 </head>
 <body>
