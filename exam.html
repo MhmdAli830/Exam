@@ -104,8 +104,11 @@
                 } else {
                     timerElement.textContent = "⏳ Time is up!";
                     warningMessage.style.display = "none"; 
-                    alert("⏳ Time is up! Please submit your form now.");
-                     window.location.href = "submit.html";
+if (!localStorage.getItem("timeExpired")) {
+    alert("⏳ Time is up! Please submit your form now.");
+    localStorage.setItem("timeExpired", "true"); // Mark as expired
+    window.location.href = "submit.html";
+}
                 }
             }
 
@@ -117,7 +120,7 @@
             sound.play();
         }
 
-        window.onload = function() {
+window.onload = function() {
     if (localStorage.getItem("timeExpired")) {
         document.getElementById("timer").textContent = "⏳ Time is up!";
         document.getElementById("warning").style.display = "none";
@@ -125,6 +128,8 @@
         startTimer();
     }
 };
+
+
 
    
     </script>
