@@ -52,19 +52,21 @@
      
         let totalTime;
 
-        fetch("YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL")
+         // Fetch exam settings from Firebase
+        fetch("https://exam-system-1a590-default-rtdb.firebaseio.com/examSettings.json")
         .then(response => response.json())
         .then(data => {
             if (data) {
-                localStorage.setItem("examDuration", data.duration);
-                document.getElementById("formFrame").src = data.examLink;
-                totalTime = data.duration * 60;
+                localStorage.setItem("examDuration", data.duration); // Store timer duration
+                document.getElementById("formFrame").src = data.examLink; // Set exam link
+                totalTime = data.duration * 60; // Convert minutes to seconds
                 startTimer();
             } else {
                 alert("❌ Error loading exam settings. Please contact the administrator.");
             }
         })
-        .catch(error => console.error("Error:", error));    // Time in seconds (e.g., 5 min = 300 sec)
+        .catch(error => console.error("Error:", error));
+    // Time in seconds (e.g., 5 min = 300 sec)
   
         let startTime;
  
