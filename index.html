@@ -46,17 +46,25 @@
             color: #004080;
         }
     </style>
-    <script>
+<script>
         function checkPassword() {
-            let password = document.getElementById("password").value;
-            if (password === "123") { // Change this password as needed
-                localStorage.setItem("examStarted", "true");
-                window.location.href = "exam.html";
-            } else {
-                alert("Incorrect password! Please try again.");
-            }
+            let enteredPassword = document.getElementById("password").value;
+
+            // Fetch exam settings from Firebase
+            fetch("https://exam-system-1a590-default-rtdb.firebaseio.com/examSettings.json")
+            .then(response => response.json())
+            .then(data => {
+                if (data && enteredPassword === data.password) {
+                    localStorage.setItem("examStarted", "true");
+                    window.location.href = "exam.html";
+                } else {
+                    alert("❌ Incorrect password! Please try again.");
+                }
+            })
+            .catch(error => console.error("Error:", error));
         }
     </script>
+    
 </head>
 <body>
     <div id="container">
