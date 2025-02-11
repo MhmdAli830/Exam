@@ -49,8 +49,23 @@
         }
     </style>
     <script>
-       let totalTime = 0.5*60;    // Time in seconds (e.g., 5 min = 300 sec)
-   // Time in seconds (e.g., 5 min = 300 sec)
+     
+        let totalTime;
+
+        fetch("YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL")
+        .then(response => response.json())
+        .then(data => {
+            if (data) {
+                localStorage.setItem("examDuration", data.duration);
+                document.getElementById("formFrame").src = data.examLink;
+                totalTime = data.duration * 60;
+                startTimer();
+            } else {
+                alert("❌ Error loading exam settings. Please contact the administrator.");
+            }
+        })
+        .catch(error => console.error("Error:", error));    // Time in seconds (e.g., 5 min = 300 sec)
+  
         let startTime;
  
 function startTimer() {
