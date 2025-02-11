@@ -49,35 +49,44 @@
         }
     </style>
     <script>
-     
         let totalTime;
 
-         // Fetch exam settings from Firebase
-        fetch("https://exam-system-1a590-default-rtdb.firebaseio.com/examSettings.json")
-        .then(response => response.json())
-        .then(data => {
-            if (data) {
-                localStorage.setItem("examDuration", data.duration); // Store timer duration
-                document.getElementById("formFrame").src = data.examLink; // Set exam link
-                totalTime = data.duration * 60; // Convert minutes to seconds
-                startTimer();
-            } else {
-                alert("❌ Error loading exam settings. Please contact the administrator.");
+        window.onload = function() {
+            // Ensure the user accessed through index.html
+            if (!localStorage.getItem("examStarted")) {
+                alert("You must enter the exam through the correct page!");
+                window.location.href = "index.html";
+                return;
             }
-        })
-        .catch(error => console.error("Error:", error));
-    // Time in seconds (e.g., 5 min = 300 sec)
-  
-        let startTime;
- 
-function startTimer() {
-    if (localStorage.getItem("startTime")) {
-        startTime = parseInt(localStorage.getItem("startTime"));
-    } else {
-        startTime = Math.floor(Date.now() / 1000);
-        localStorage.setItem("startTime", startTime);
-    }
 
+            // Fetch exam settings from Firebase
+            fetch("https://exam-system-1a590-default-rtdb.firebaseio.com/examSettings.json")
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.examLink && data.duration) {
+                    // Store values in local storage
+                    localStorage.setItem("examDuration", data.duration);
+                    localStorage.setItem("examLink", data.examLink);
+
+                    // Update iframe link dynamically
+                    document.getElementById("formFrame").src = data.examLink;
+
+                    // Set timer duration
+                    totalTime = data.duration * 60;
+                    startTimer();
+                } else {
+                    alert("❌ Error: Exam settings not found. Contact the administrator.");
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching exam settings:", error);
+                alert("⚠️ Unable to load exam settings. Please try again later.");
+            });
+        };
+
+        function startTimer() {
+            let startTime = localStorage.getItem("startTime") ? parseInt(localStorage.getItem("startTime")) : Math.floor(Date.now() / 1000);
+            localStorage.setItem("startTime", startTime);
 
             function updateTimer() {
                 let currentTime = Math.floor(Date.now() / 1000);
@@ -96,8 +105,8 @@ function startTimer() {
                     let progressPercentage = (timeLeft / totalTime) * 100;
                     progressBar.style.width = progressPercentage + "%";
 
-                    // Show warnings and play different sounds
-                    if (timeLeft <= Math.floor(totalTime / 2) && timeLeft > Math.floor(totalTime / 2) - 2) { 
+                    // Show warnings and play sounds
+                    if (timeLeft === Math.floor(totalTime / 2)) { 
                         warningMessage.textContent = "⚠️ You are halfway through the time!";
                         warningMessage.style.display = "block";
                         playWarningSound("https://www.fesliyanstudios.com/play-mp3/4916");
@@ -114,7 +123,6 @@ function startTimer() {
                         timerElement.classList.add("blinking"); // Add blinking effect
                     }
 
-                    // 🔔 Countdown beep for last 10 seconds
                     if (timeLeft <= 10 && timeLeft > 0) {
                         playWarningSound("https://www.fesliyanstudios.com/play-mp3/4916"); // Short beep sound
                     }
@@ -123,11 +131,12 @@ function startTimer() {
                 } else {
                     timerElement.textContent = "⏳ Time is up!";
                     warningMessage.style.display = "none"; 
-if (!localStorage.getItem("timeExpired")) {
-    alert("⏳ Time is up! Please submit your form now.");
-    localStorage.setItem("timeExpired", "true"); // Mark as expired
-    window.location.href = "submit.html";
-}
+
+                    if (!localStorage.getItem("timeExpired")) {
+                        alert("⏳ Time is up! Please submit your form now.");
+                        localStorage.setItem("timeExpired", "true");
+                        window.location.href = "submit.html";
+                    }
                 }
             }
 
@@ -135,27 +144,13 @@ if (!localStorage.getItem("timeExpired")) {
         }
 
         function playWarningSound(soundUrl) {
-            let sound = new Audio(soundUrl); // Play different sounds for each warning
+            let sound = new Audio(soundUrl);
             sound.play();
         }
-
-window.onload = function() {
-    if (!localStorage.getItem("examStarted")) {
-        alert("You must enter the exam through the correct page!");
-        window.location.href = "index.html";
-        return;
-    }
-
-    startTimer();
-};
-
-
-
-   
     </script>
 </head>
 <body>
-    <div id="timer">Time Left: 10:00</div>
+    <div id="timer">Loading...</div>
     <div id="warning"></div>
 
     <!-- Progress bar -->
@@ -163,7 +158,8 @@ window.onload = function() {
         <div id="progress-bar"></div>
     </div>
 
-    <iframe id="formFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSdfck49zdsLIzUIx2CzShjTQ6nps0VMKKPQHE3k8sVgnles5g/viewform?usp=header" allowfullscreen></iframe>
+    <!-- Exam form loaded dynamically -->
+    <iframe id="formFrame" src="" allowfullscreen></iframe>
 
 </body>
 </html>
